@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>月度填报页面</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/element-plus@2.4.4/theme-chalk/index.css">
+</head>
+<body>
+  <div id="app">
+    <!-- 导航栏 -->
+    <nav class="nav-header">
+      <div class="nav-brand">
+        <svg class="brand-icon" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm4 18H6V4h7v5h5v11z"/>
+        </svg>
+        <span class="brand-text">月度填报页面</span>
+      </div>
+      <div class="nav-menu">
+        <a href="#/report" class="nav-item" id="nav-report">
+          <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16">
+            <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a.996.996 0 0 0 0-1.41l-2.34-2.34a.996.996 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/>
+          </svg>
+          <span>用户填报</span>
+        </a>
+        <a href="#/plan" class="nav-item" id="nav-plan">
+          <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16">
+            <path d="M19.14 12.94c.04-.31.06-.63.06-.94 0-.31-.02-.63-.06-.94l2.03-1.58a.49.49 0 0 0 .12-.61l-1.92-3.32a.49.49 0 0 0-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54a.484.484 0 0 0-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.04.31-.06.63-.06.94 0 .31.02.63.06.94l-2.03 1.58a.49.49 0 0 0-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/>
+          </svg>
+          <span>计划设置</span>
+        </a>
+      </div>
+    </nav>
+
+    <!-- 主内容区 -->
+    <main class="main-content">
+      <!-- 用户填报页面 -->
+      <div id="page-report" class="page-container" style="display: none;">
+        <div class="page-header">
+          <div class="page-title">
+            <h2>用户月度信息填报</h2>
+            <p class="page-desc">请在下方选择计划进行填报</p>
+          </div>
+        </div>
+
+        <div class="plan-table-view">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>计划名称</th>
+                <th>月份</th>
+                <th>填报字段</th>
+                <th>填报状态</th>
+                <th>操作</th>
+              </tr>
+            </thead>
+            <tbody id="report-table-body">
+            </tbody>
+          </table>
+          <div class="pagination-wrapper" id="report-pagination"></div>
+        </div>
+      </div>
+
+      <!-- 计划设置页面 -->
+      <div id="page-plan" class="page-container" style="display: none;">
+        <div class="page-header">
+          <div class="page-title">
+            <h2>计划设置</h2>
+            <p class="page-desc">管理月度填报计划，点击计划名称查看填报数据</p>
+          </div>
+          <button class="btn btn-primary" id="btn-add-plan">
+            <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16">
+              <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
+            </svg>
+            新增计划
+          </button>
+        </div>
+
+        <!-- 计划列表视图 -->
+        <div id="plan-list-view">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>计划名称</th>
+                <th>月份</th>
+                <th>填报字段</th>
+                <th>状态</th>
+                <th>操作</th>
+              </tr>
+            </thead>
+            <tbody id="plan-table-body">
+            </tbody>
+          </table>
+          <div class="pagination-wrapper" id="plan-pagination"></div>
+        </div>
+
+        <!-- 计划详情视图 -->
+        <div id="plan-detail-view" style="display: none;">
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <h3 id="detail-plan-name"></h3>
+                <p class="detail-info" id="detail-plan-info"></p>
+              </div>
+              <div class="detail-actions">
+                <button class="btn btn-success" id="btn-export-detail">导出数据</button>
+                <button class="btn" id="btn-back-list">返回列表</button>
+              </div>
+            </div>
+            <table class="data-table">
+              <thead>
+                <tr id="detail-table-header"></tr>
+              </thead>
+              <tbody id="detail-table-body"></tbody>
+            </table>
+            <div class="empty-state" id="detail-empty" style="display: none;">
+              <p>暂无填报数据</p>
+            </div>
+            <div class="pagination-wrapper" id="detail-pagination"></div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- 填报弹窗 -->
+    <div class="modal-overlay" id="report-modal">
+      <div class="modal">
+        <div class="modal-header">
+          <h3 id="report-modal-title">填报</h3>
+          <button class="modal-close" id="report-modal-close">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div class="info-bar">
+            <span id="report-modal-month"></span>
+            <span class="status-text" id="report-modal-status" style="display: none;">已填报，可修改</span>
+          </div>
+          <div class="excel-table-wrapper">
+            <table class="excel-table" id="report-excel-table">
+              <thead></thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn" id="report-modal-cancel">取消</button>
+          <button class="btn btn-primary" id="report-modal-submit">提交</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 新增/编辑计划弹窗 -->
+    <div class="modal-overlay" id="plan-modal">
+      <div class="modal modal-lg">
+        <div class="modal-header">
+          <h3 id="plan-modal-title">新增计划</h3>
+          <button class="modal-close" id="plan-modal-close">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div class="form-item">
+            <label>计划名称</label>
+            <input type="text" id="plan-form-name" placeholder="请输入计划名称">
+          </div>
+          <div class="form-item">
+            <label>所属月份</label>
+            <input type="month" id="plan-form-month">
+          </div>
+          <div class="form-item">
+            <label>填报字段</label>
+            <div id="fields-config"></div>
+            <button class="btn btn-text" id="btn-add-field">+ 添加字段</button>
+          </div>
+
+        </div>
+        <div class="modal-footer">
+          <button class="btn" id="plan-modal-cancel">取消</button>
+          <button class="btn btn-primary" id="plan-modal-submit">确定</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 删除确认弹窗 -->
+    <div class="modal-overlay" id="delete-modal">
+      <div class="modal modal-sm">
+        <div class="modal-header">
+          <h3>确认删除</h3>
+          <button class="modal-close" id="delete-modal-close">&times;</button>
+        </div>
+        <div class="modal-body">
+          <p>确定要删除计划「<span id="delete-plan-name"></span>」吗？</p>
+          <p class="warning-text">删除后，该计划下的所有数据也将被删除，请谨慎操作。</p>
+        </div>
+        <div class="modal-footer">
+          <button class="btn" id="delete-modal-cancel">取消</button>
+          <button class="btn btn-danger" id="delete-modal-confirm">确认删除</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 作废提示弹窗 -->
+    <div class="modal-overlay" id="cancel-modal">
+      <div class="modal modal-sm">
+        <div class="modal-header">
+          <h3>作废风险提示</h3>
+          <button class="modal-close" id="cancel-modal-close">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div class="cancel-warning">
+            <svg class="warning-icon" viewBox="0 0 24 24" fill="#e6a23c" width="32">
+              <path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/>
+            </svg>
+            <div class="warning-content">
+              <h4>即将作废计划「<span id="cancel-plan-name"></span>」</h4>
+              <ul>
+                <li>作废后，该计划将无法继续填报</li>
+                <li>已有数据将被保留，无法新增</li>
+                <li>此操作可以逆转为"启用"状态</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn" id="cancel-modal-cancel">取消</button>
+          <button class="btn btn-warning" id="cancel-modal-confirm">确认作废</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toast提示 -->
+    <div class="toast" id="toast"></div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@3.4.15/dist/vue.global.prod.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/element-plus@2.4.4/dist/index.full.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
